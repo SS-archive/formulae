@@ -1,6 +1,10 @@
 include:
     - epel
     - selinux
+    - mysql
+    - apache
+    - memcached
+    - avahi
 
 permissive:
     selinux.mode:
@@ -26,17 +30,11 @@ openstack-pkgs:
             - openstack-swift-proxy
             - openstack-dashboard
             - openstack-utils
-            - memcached
             - qpid-cpp-server
-            - avahi
-            - avahi-libs
             # if RHEL 6.3
             - dnsmasq-utils
             # elif <= RHEL 6.2:
             # cmd.run: penstack-config --set /etc/nova/nova.conf DEFAULT force_dhcp_release False
-
-mysql-server:
-    pkg.installed
 
 mysqld:
     service:
