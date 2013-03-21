@@ -1,0 +1,2 @@
+memcached:
+    pkg.installed
