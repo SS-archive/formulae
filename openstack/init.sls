@@ -19,7 +19,6 @@ openstack-pkgs:
             - pkg.installed: mysql-server
         - names:
             - openstack-nova
-            - openstack-glance
             - openstack-keystone
             - openstack-quantum
             - openstack-swift
@@ -60,27 +59,6 @@ nova-db-init:
         - require:
             - pkg: openstack-nova
             - service: mysqld
-
-glance-db-init:
-    cmd:
-        - run
-        - name: openstack-db --init --service glance --rootpw ''
-
-        - unless: echo '' | mysql glance
-        - require:
-            - pkg.installed: openstack-glance
-            - service.running: mysqld
-
-glance-services:
-    service:
-        - running
-        - enable: True
-        - names:
-            - openstack-glance-api
-            - openstack-glance-registry
-        - require:
-            - pkg.installed: openstack-glance
-            - cmd.run: glance-db-init
 
 nova-services:
     service:
@@ -135,15 +113,6 @@ openstack-keystone:
             - pkg.installed: openstack-keystone
         - watch_in:
             - service: openstack-keystone
-
-/etc/glance:
-    file:
-        - recurse
-        - source: salt://openstack/glance
-        - require:
-            - pkg.installed: openstack-glance
-        - watch_in:
-            - service: glance-services
 
 httpd:
     service:

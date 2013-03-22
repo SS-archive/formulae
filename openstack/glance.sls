@@ -1,3 +1,6 @@
+include:
+  - mysql
+
 openstack-glance:
   pkg.installed
 
