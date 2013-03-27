@@ -1,6 +1,5 @@
 httpd:
-    service:
-        - running
-        - enable: True
-    package:
+    pkg:
         - installed
+    service.running:
+        - enable: True
