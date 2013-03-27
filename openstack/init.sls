@@ -33,17 +33,15 @@ openstack-pkgs:
             # if RHEL 6.3
             - dnsmasq-utils
             # elif <= RHEL 6.2:
-            # cmd.run: penstack-config --set /etc/nova/nova.conf DEFAULT force_dhcp_release False
+            # cmd.run: openstack-config --set /etc/nova/nova.conf DEFAULT force_dhcp_release False
 
 mysqld:
-    service:
-        - running
+    service.running:
     require:
         - pkg.installed: mysql-server
 
 nova-support:
-    service:
-        - running
+    service.running:
         - enable: True
         - names:
             - mysqld
@@ -52,8 +50,7 @@ nova-support:
             - messagebus
 
 nova-db-init:
-    cmd:
-        - run
+    cmd.run:
         - name: openstack-db --init --service nova --rootpw ''
         - unless: echo '' | mysql nova
         - require:
@@ -61,8 +58,7 @@ nova-db-init:
             - service: mysqld
 
 nova-services:
-    service:
-        - running
+    service.running:
         - enable: True
         - names:
             - openstack-nova-api
@@ -78,18 +74,15 @@ nova-services:
             - service.running: openstack-glance-api
 
 keystone-db-init:
-    cmd:
-        - run
+    cmd.run:
         - name: openstack-db --init --service keystone --rootpw ''
-
         - unless: echo '' | mysql keystone
         - require:
             - pkg.installed: openstack-keystone
             - service.running: mysqld
 
 openstack-keystone:
-    service:
-        - running
+    service.running:
         - enable: True
         - require:
             - pkg.installed: openstack-keystone
@@ -97,8 +90,7 @@ openstack-keystone:
             - cmd.run: keystone-db-init
 
 /etc/nova:
-    file:
-        - recurse
+    file.recurse:
         - source: salt://openstack/nova
         - require:
             - pkg.installed: openstack-nova
@@ -106,8 +98,7 @@ openstack-keystone:
             - service: nova-services
 
 /etc/keystone:
-    file:
-        - recurse
+    file.recurse:
         - source: salt://openstack/keystone
         - require:
             - pkg.installed: openstack-keystone
@@ -115,8 +106,7 @@ openstack-keystone:
             - service: openstack-keystone
 
 httpd:
-    service:
-        - running
+    service.running:
         - enable: True
         - require:
             - pkg.installed: openstack-dashboard
