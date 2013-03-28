@@ -1,8 +1,10 @@
 mysql-server:
-    pkg.installed
+    pkg:
+        - installed
 
 mysqld:
     service:
         - running
+        - enable:True
     require:
-        - pkg.installed: mysql-server
+        - pkg: mysql-server
