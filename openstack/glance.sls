@@ -2,10 +2,12 @@ include:
   - mysql
 
 openstack-glance:
-  pkg.installed
+    pkg:
+        - installed
 
 glance-db-init:
-    cmd.run:
+    cmd:
+        - run
         - name: openstack-db --init --service glance --rootpw ''
         - unless: echo '' | mysql glance
         - require:
@@ -13,7 +15,8 @@ glance-db-init:
             - service: mysqld
 
 glance-services:
-    service.running:
+    service:
+        - running
         - enable: True
         - names:
             - openstack-glance-api
@@ -25,7 +28,8 @@ glance-services:
           - file: /etc/glance
 
 /etc/glance:
-    file.recurse:
+    file:
+        - recurse
         - source: salt://openstack/glance
         - template: jinja
         - require:
