@@ -1,5 +1,7 @@
 avahi:
-    pkg.installed
+    pkg:
+        - installed
 
 avahi-libs:
-    pkg.installed
+    pkg:
+        - installed
